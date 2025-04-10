@@ -1,0 +1,15 @@
+services:
+  mongodb:
+    image: mongo:8.0
+    container_name: portfolio-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    ports:
+      - 27017:27017
+    volumes:
+      - dbdata:/data/db
+
+volumes:
+  dbdata:
