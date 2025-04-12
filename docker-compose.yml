@@ -1,15 +1,36 @@
 services:
-  mongodb:
+  pf-mongodb:
     image: mongo:8.0
     container_name: portfolio-db
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-    ports:
-      - 27017:27017
     volumes:
-      - dbdata:/data/db
+      - portfolio-dbdata:/data/db
+    restart: unless-stopped
+
+  pf-backend:
+    image: akuan09/portfolio_backend:latest
+    container_name: portfolio-backend
+    depends_on:
+      - pf-mongodb
+    ports:
+      - 14000:3000
+    environment:
+      MONGO_URI: ${MONGO_URI}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      PORT: 3000
+    restart: unless-stopped
+
+  pf-frontend:
+    image: akuan09/portfolio_frontend:latest
+    container_name: portfolio-frontend
+    depends_on:
+      - pf-backend
+    ports:
+      - 14001:80
+    restart: unless-stopped
 
 volumes:
-  dbdata:
+  portfolio-dbdata:
