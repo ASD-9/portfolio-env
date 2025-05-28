@@ -15,22 +15,38 @@ services:
     container_name: portfolio-backend
     depends_on:
       - pf-mongodb
-    ports:
-      - 14000:3000
     environment:
       MONGO_URI: ${MONGO_URI}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
       PORT: 3000
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pf-backend.rule=Host(`portfolio-api.asd9.fun`)"
+      - "traefik.http.routers.pf-backend.entrypoints=websecure"
+      - "traefik.http.routers.pf-backend.tls.certresolver=letsencrypt"
+    networks:
+      - default
+      - traefik_network
 
   pf-frontend:
     image: akuan09/portfolio_frontend:latest
     container_name: portfolio-frontend
     depends_on:
       - pf-backend
-    ports:
-      - 14001:80
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pf-frontend.rule=Host(`portfolio.asd9.fun`)"
+      - "traefik.http.routers.pf-frontend.entrypoints=websecure"
+      - "traefik.http.routers.pf-frontend.tls.certresolver=letsencrypt"
+    networks:
+      - traefik_network
 
 volumes:
   portfolio-dbdata:
+
+networks:
+  default:
+  traefik_network:
+    external: true
