@@ -25,6 +25,7 @@ services:
       - "traefik.http.routers.pf-backend.rule=Host(`portfolio-api.asd9.fun`)"
       - "traefik.http.routers.pf-backend.entrypoints=websecure"
       - "traefik.http.routers.pf-backend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.pf-backend.loadbalancer.server.port=3000"
     networks:
       - default
       - traefik_network
