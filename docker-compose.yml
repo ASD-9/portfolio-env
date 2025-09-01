@@ -38,8 +38,19 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pf-frontend.rule=Host(`portfolio.asd9.fun`)"
+      - "traefik.http.routers.pf-frontend.rule=Host(`portfolio-terminal.asd9.fun`)"
       - "traefik.http.routers.pf-frontend.tls.certresolver=letsencrypt"
+    networks:
+      - traefik_network
+
+  pf-flutter:
+    image: akuan09/portfolio:latest
+    container_name: portfolio-flutter
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pf-flutter.rule=Host(`portfolio.asd9.fun`)"
+      - "traefik.http.routers.pf-flutter.tls.certresolver=letsencrypt"
     networks:
       - traefik_network
 
